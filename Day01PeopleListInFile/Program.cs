@@ -66,6 +66,7 @@ namespace Day01PeopleListInFile
             }
 
             SaveAllPeopleToFile();
+            Console.ReadLine();
         }
 
         static void ReadAllPeopleFromFile()
@@ -73,34 +74,34 @@ namespace Day01PeopleListInFile
             string line;
             try
             {
-                StreamReader reader = new StreamReader(path);
-
-                line = reader.ReadLine();
-
-                while (line != null)
+                using (StreamReader reader = new StreamReader(path))
                 {
-                    Person person= new Person();
-
-                    string[] info = line.Split(';');
-
-
-                    if (!int.TryParse(info[1], out int age) || info[2] == null)
-                    {
-                        Console.WriteLine("Invalid value.");
-                        line = reader.ReadLine();
-                        continue;
-                    }
-
-                    person.setName(info[0]);
-                    person.setAge(age);
-                    person.setCity(info[2]);
-
-                    people.Add(person);
-
                     line = reader.ReadLine();
-                }
 
-                reader.Close();
+                    while (line != null)
+                    {
+                        Person person = new Person();
+
+                        string[] info = line.Split(';');
+
+
+                        if (!int.TryParse(info[1], out int age) || info[2] == null)
+                        {
+                            Console.WriteLine("Invalid value.");
+                            line = reader.ReadLine();
+                            continue;
+                        }
+
+                        person.setName(info[0]);
+                        person.setAge(age);
+                        person.setCity(info[2]);
+
+                        people.Add(person);
+
+                        line = reader.ReadLine();
+                    }
+                }
+                //reader.Close();
             }
             catch (Exception e)
             {
@@ -112,15 +113,16 @@ namespace Day01PeopleListInFile
         {
             try
             {
-                FileStream fs = new FileStream(path, FileMode.Append);
-                StreamWriter writer = new StreamWriter(fs);
-
-                people.ForEach(person =>
+                //FileStream fs = new FileStream(path, FileMode.Append);
+                using (StreamWriter writer = new StreamWriter(path))
                 {
-                    writer.WriteLine($"{person.getName()};{person.getAge()};{person.getCity()}");
-                });
+                    people.ForEach(person =>
+                    {
+                        writer.WriteLine($"{person.getName()};{person.getAge()};{person.getCity()}");
+                    });
+                }
 
-                writer.Close();
+                //writer.Close();
             }
             catch (Exception e)
             {
