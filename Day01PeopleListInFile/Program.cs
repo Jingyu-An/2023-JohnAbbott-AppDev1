@@ -4,16 +4,92 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using static Day01PeopleListInFile.Program;
 
 namespace Day01PeopleListInFile
 {
+
+    internal class Person
+    {
+        private string _name;
+        public string Name {
+            get { return _name; }
+            set {
+                if(!Regex.IsMatch(value, @"^[^;]{2,100}$")) 
+                {
+                    throw new AggregateException("Name must be 2-100 characters long, no semicolens");
+                }
+                _name = value; 
+            }
+        }
+
+        private int _age;
+        public int Age
+        {
+            get { return _age; }
+            set { 
+                if (value < 0 || value > 150)
+                {
+                    throw new AggregateException("Age must be 0-150");
+                }
+                _age = value; 
+            }
+        }
+
+        private string _city;
+        public string City
+        {
+            get { return _city; }
+            set { 
+                if(!Regex.IsMatch(value, @"^[^;]{2,100}$")) 
+                {
+                    throw new AggregateException("City must be 2-100 characters long, no semicolens");
+                }
+                _city = value; 
+            }
+        }
+/*
+        public string getName()
+        {
+            return Name;
+        }
+
+        public void setName(string name)
+        {
+            Name = name;
+        }
+
+        public int getAge()
+        {
+            return Age;
+        }
+        public void setAge(int age)
+        {
+            Age = age;
+        }
+
+        public void setCity(string city)
+        {
+            City = city;
+        }
+        public string getCity()
+        {
+            return City;
+        }
+*/
+        public override string ToString()
+        {
+            return $"{Name} is {Age} from {City}";
+        }
+    }
+
     internal class Program
     {
         static List<Person> people = new List<Person>();
-        static string path = @"C:\Users\Administrator\source\repos\Jingyu-An\2023-JohnAbbott-AppDev1\Day01PeopleListInFile\people.txt";
+        const string path = @"C:\Users\Administrator\source\repos\Jingyu-An\2023-JohnAbbott-AppDev1\Day01PeopleListInFile\people.txt";
 
         static void Main(string[] args)
         {
@@ -23,13 +99,13 @@ namespace Day01PeopleListInFile
 
             while (running)
             {
-                Console.WriteLine("What do you want to do?");
-                Console.WriteLine("1. Add person info");
-                Console.WriteLine("2. List persons info");
-                Console.WriteLine("3. Find and list a person by name");
-                Console.WriteLine("4. Find and list persons younger than age");
-                Console.WriteLine("0. Exit");
-                Console.Write("Choice: ");
+                Console.Write("What do you want to do?\n" +              
+                    "1. Add person info\n" +
+                    "2. List persons info\n" +
+                    "3. Find and list a person by name\n" +
+                    "4. Find and list persons younger than age\n" +
+                    "0. Exit\n" +
+                    "Choice: ");
 
                 string choice = Console.ReadLine();
 
@@ -74,6 +150,10 @@ namespace Day01PeopleListInFile
             string line;
             try
             {
+                if (!File.Exists(path))
+                {
+                    return;
+                }
                 using (StreamReader reader = new StreamReader(path))
                 {
                     line = reader.ReadLine();
@@ -85,16 +165,16 @@ namespace Day01PeopleListInFile
                         string[] info = line.Split(';');
 
 
-                        if (!int.TryParse(info[1], out int age) || info[2] == null)
+                        if (!int.TryParse(info[1], out int age) || info.Length != 3)
                         {
                             Console.WriteLine("Invalid value.");
                             line = reader.ReadLine();
                             continue;
                         }
 
-                        person.setName(info[0]);
-                        person.setAge(age);
-                        person.setCity(info[2]);
+                        person.Name = info[0];
+                        person.Age = age;
+                        person.City = info[2];
 
                         people.Add(person);
 
@@ -118,7 +198,7 @@ namespace Day01PeopleListInFile
                 {
                     people.ForEach(person =>
                     {
-                        writer.WriteLine($"{person.getName()};{person.getAge()};{person.getCity()}");
+                        writer.WriteLine($"{person.Name};{person.Age};{person.City}");
                     });
                 }
 
@@ -137,24 +217,30 @@ namespace Day01PeopleListInFile
 
             Console.Write("Enter name: ");
             string name = Console.ReadLine();
-            person.setName(name);
+            person.Name = name;
 
             while (true)
             {
-                Console.Write("Enter age: ");
-                string strAge = Console.ReadLine();
-                if (!int.TryParse(strAge, out int age) || age > 150 || age < 0)
+                try
                 {
-                    Console.WriteLine("Invalid age try again.(Age: 0 - 150)");
-                    continue;
+                    Console.Write("Enter age: ");
+                    string strAge = Console.ReadLine();
+                    if (!int.TryParse(strAge, out int age))
+                    {
+                        Console.WriteLine("Invalid age try again.");
+                        continue;
+                    }
+                    person.Age = age;
+                    break;
+                } catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
                 }
-                person.setAge(age);
-                break;
             }
 
             Console.Write("Enter city: ");
             string city = Console.ReadLine();
-            person.setCity(city);
+            person.City = city;
 
             people.Add(person);
 
@@ -177,7 +263,7 @@ namespace Day01PeopleListInFile
 
             people.ForEach(person =>
             {
-                if (person.getName().Contains(partialName))
+                if (person.Name.Contains(partialName))
                 {
                     Console.WriteLine(person);
                 }
@@ -201,7 +287,7 @@ namespace Day01PeopleListInFile
 
                 people.ForEach(person =>
                 {
-                    if (person.getAge() < maxAge)
+                    if (person.Age < maxAge)
                     {
                         Console.WriteLine(person);
                     }
@@ -211,44 +297,5 @@ namespace Day01PeopleListInFile
             Console.WriteLine("\n");
         }
 
-        public class Person
-        {
-            public string Name;
-            public int Age;
-            public string City;
-
-            public string getName()
-            {
-                return Name;
-            }
-
-            public void setName(string name)
-            {
-                Name = name;
-            }
-
-            public int getAge()
-            {
-                return Age;
-            }
-            public void setAge(int age)
-            {
-                Age = age;
-            }
-
-            public void setCity(string city)
-            {
-                City = city;
-            }
-            public string getCity()
-            {
-                return City;
-            }
-
-            public override string ToString()
-            {
-                return $"{Name} is {Age} from {City}";
-            }
-        }
     }
 }
