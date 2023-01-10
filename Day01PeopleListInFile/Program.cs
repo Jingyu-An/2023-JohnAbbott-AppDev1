@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static Day01PeopleListInFile.Program;
 
 namespace Day01PeopleListInFile
 {
@@ -42,15 +43,19 @@ namespace Day01PeopleListInFile
                         break;
 
                     case 1:
+                        AddPersonInfo();
                         break;
 
                     case 2:
+                        ListAllPersonsInfo();
                         break;
 
                     case 3:
+                        FindPersonByName();
                         break;
 
                     case 4:
+                        FindPersonYoungerThan();
                         break;
 
                 }
@@ -59,19 +64,80 @@ namespace Day01PeopleListInFile
 
         static void AddPersonInfo()
         {
+            Person person = new Person();
+            Console.WriteLine("\nAdding a person.");
 
+            Console.Write("Enter name: ");
+            string name = Console.ReadLine();
+            person.setName(name);
+
+            while (true)
+            {
+                Console.Write("Enter age: ");
+                string strAge = Console.ReadLine();
+                if (!int.TryParse(strAge, out int age) || age > 150 || age < 0)
+                {
+                    Console.WriteLine("Invalid age try again.(Age: 0 - 150)");
+                    continue;
+                }
+                person.setAge(age);
+                break;
+            }
+
+            Console.Write("Enter city: ");
+            string city = Console.ReadLine();
+            person.setCity(city);
+
+            people.Add(person);
+
+            Console.WriteLine("Person added.\n");
         }
         static void ListAllPersonsInfo()
         {
-
+            Console.WriteLine("\nListing all persons");
+            people.ForEach(person =>
+            {
+                Console.WriteLine(person);
+            });
+            Console.WriteLine("\n");
         }
         static void FindPersonByName()
         {
+            Console.WriteLine("\nEnter partial person name:");
+            string partialName = Console.ReadLine();
 
+            people.ForEach(person =>
+            {
+                if(person.getName().Contains(partialName)) {
+                    Console.WriteLine(person);
+                }
+            });
+            Console.WriteLine("\n");
         }
         static void FindPersonYoungerThan()
         {
+            Console.WriteLine("\n");
+            while (true)
+            {
+                Console.WriteLine("Enter maximum age:");
+                string strAge = Console.ReadLine();
 
+                if (!int.TryParse(strAge, out int maxAge))
+                {
+                    Console.WriteLine("Invalid age try again.");
+                    continue;
+                }
+
+                people.ForEach(person =>
+                {
+                    if(person.getAge() < maxAge)
+                    {
+                        Console.WriteLine(person);
+                    }
+                });
+                break;
+            }
+            Console.WriteLine("\n");
         }
 
         public class Person
@@ -110,7 +176,7 @@ namespace Day01PeopleListInFile
 
             public override string ToString()
             {
-                return Name + " is " + Age + " from " + City;
+                return $"{Name} is {Age} from {City}";
             }
         }
     }
