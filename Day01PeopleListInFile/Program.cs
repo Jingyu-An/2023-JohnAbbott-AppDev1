@@ -86,7 +86,7 @@ namespace Day01PeopleListInFile
 
                     if (!int.TryParse(info[1], out int age) || info[2] == null)
                     {
-                        Console.WriteLine("Invalid age try again.(Age: 0 - 150)");
+                        Console.WriteLine("Invalid value.");
                         line = reader.ReadLine();
                         continue;
                     }
