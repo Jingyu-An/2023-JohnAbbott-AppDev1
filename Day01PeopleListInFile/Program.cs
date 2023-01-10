@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ namespace Day01PeopleListInFile
     internal class Program
     {
         static List<Person> people = new List<Person>();
+        static string path = @"C:\Users\Administrator\source\repos\Jingyu-An\2023-JohnAbbott-AppDev1\Day01PeopleListInFile\people.txt";
 
         static void Main(string[] args)
         {
+            ReadAllPeopleFromFile();
 
             bool running = true;
 
@@ -60,6 +63,33 @@ namespace Day01PeopleListInFile
 
                 }
             }
+
+            SaveAllPeopleToFile();
+        }
+
+        static void ReadAllPeopleFromFile()
+        {
+
+        }
+
+        static void SaveAllPeopleToFile()
+        {
+            try
+            {
+                FileStream fs = new FileStream(path, FileMode.Append);
+                StreamWriter writer = new StreamWriter(fs);
+
+                people.ForEach(person =>
+                {
+                    writer.WriteLine($"{person.getName()};{person.getAge()};{person.getCity()}");
+                });
+
+                writer.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Excetion: " + e.Message);
+            }
         }
 
         static void AddPersonInfo()
@@ -92,6 +122,7 @@ namespace Day01PeopleListInFile
 
             Console.WriteLine("Person added.\n");
         }
+
         static void ListAllPersonsInfo()
         {
             Console.WriteLine("\nListing all persons");
@@ -114,6 +145,7 @@ namespace Day01PeopleListInFile
             });
             Console.WriteLine("\n");
         }
+
         static void FindPersonYoungerThan()
         {
             Console.WriteLine("\n");
