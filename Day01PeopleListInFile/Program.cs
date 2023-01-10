@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -42,7 +43,7 @@ namespace Day01PeopleListInFile
                 {
                     case 0:
                         Console.WriteLine("\nGood bye!\n");
-                        running= false;
+                        running = false;
                         break;
 
                     case 1:
@@ -69,7 +70,42 @@ namespace Day01PeopleListInFile
 
         static void ReadAllPeopleFromFile()
         {
+            string line;
+            try
+            {
+                StreamReader reader = new StreamReader(path);
 
+                line = reader.ReadLine();
+
+                while (line != null)
+                {
+                    Person person= new Person();
+
+                    string[] info = line.Split(';');
+
+
+                    if (!int.TryParse(info[1], out int age) || info[2] == null)
+                    {
+                        Console.WriteLine("Invalid age try again.(Age: 0 - 150)");
+                        line = reader.ReadLine();
+                        continue;
+                    }
+
+                    person.setName(info[0]);
+                    person.setAge(age);
+                    person.setCity(info[2]);
+
+                    people.Add(person);
+
+                    line = reader.ReadLine();
+                }
+
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
         }
 
         static void SaveAllPeopleToFile()
@@ -139,7 +175,8 @@ namespace Day01PeopleListInFile
 
             people.ForEach(person =>
             {
-                if(person.getName().Contains(partialName)) {
+                if (person.getName().Contains(partialName))
+                {
                     Console.WriteLine(person);
                 }
             });
@@ -162,7 +199,7 @@ namespace Day01PeopleListInFile
 
                 people.ForEach(person =>
                 {
-                    if(person.getAge() < maxAge)
+                    if (person.getAge() < maxAge)
                     {
                         Console.WriteLine(person);
                     }
