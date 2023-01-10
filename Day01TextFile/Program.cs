@@ -15,14 +15,22 @@ namespace Day01TextFile
             Console.Write("What is your name? ");
             string name = Console.ReadLine();
 
-            string path = @"C:\Users\Administrator\source\repos\Jingyu-An\2023-JohnAbbott-AppDev1\Day01TextFile\data.txt";
+            const string path = @"C:\Users\Administrator\source\repos\Jingyu-An\2023-JohnAbbott-AppDev1\Day01TextFile\data.txt";
+
 
             try
             {
-                FileStream fs = new FileStream(path, FileMode.Append);
+                using (StreamWriter sw = new StreamWriter(path, true))
+                {
+                    sw.WriteLine(name);
+                    sw.WriteLine(name);
+                    sw.WriteLine(name);
+                }
+/*
+                //FileStream fs = new FileStream(path, FileMode.Append);
 
                 //Pass the filepath and filename to the StreamWriter Constructor
-                StreamWriter sw = new StreamWriter(fs);
+                //StreamWriter sw = new StreamWriter(fs);
 
                 //Write a line of text
                 sw.WriteLine(name);
@@ -31,15 +39,28 @@ namespace Day01TextFile
                 //Write a second line of text
                 //Close the file
                 sw.Close();
+*/
             }
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
             }
 
+
             String line;
             try
             {
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    line = sr.ReadLine();
+                    while (line != null)
+                    {
+                        Console.WriteLine(line);
+                        line = sr.ReadLine();
+                    }
+                    Console.ReadLine();
+                }
+/*
                 //Pass the file path and file name to the StreamReader constructor
                 StreamReader sr = new StreamReader(path);
                 //Read the first line of text
@@ -55,6 +76,7 @@ namespace Day01TextFile
                 //close the file
                 sr.Close();
                 Console.ReadLine();
+*/
             }
             catch (Exception e)
             {
