@@ -28,7 +28,7 @@ namespace Day03ListGridViewPeople
         public static bool IsAgeValid(int age, out string error)
         {
             error = null;
-            return age >= 0 && age <= 150; // FIXME: Age must be 0-150
+            return age >= 0 && age <= 150 ; // FIXME: Age must be 0-150
         }
     }
 }

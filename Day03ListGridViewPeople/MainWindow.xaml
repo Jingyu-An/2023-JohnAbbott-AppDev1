@@ -14,8 +14,8 @@
                 <MenuItem Header="E_xit" />
             </MenuItem>
             <MenuItem Header="_Sort">
-                <MenuItem Header="By _name" />
-                <MenuItem Header="By _age" />
+                <MenuItem Header="By _name" Click="SortByName_Click"/>
+                <MenuItem Header="By _age" Click="SortByAge_Click"/>
             </MenuItem>
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">

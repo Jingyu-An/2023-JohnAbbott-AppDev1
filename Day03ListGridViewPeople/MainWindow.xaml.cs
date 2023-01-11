@@ -32,8 +32,8 @@ namespace Day03ListGridViewPeople
             string error = null;
             if (Person.IsNameValid(name, out error))
             {
-                int.TryParse(TbxAge.Text, out int age); // okay: no need to validate again
-                if(Person.IsAgeValid(age, out error)) {
+                 // okay: no need to validate again
+                if(int.TryParse(TbxAge.Text, out int age) && Person.IsAgeValid(age, out error)) {
                     peopleList.Add(new Person(name, age));
                     LvPeople.Items.Refresh(); // tell ListView data has changed
                 }
@@ -46,18 +46,54 @@ namespace Day03ListGridViewPeople
             {
                 MessageBox.Show(this, "Name must be 2-50 characters long, no semicolons", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            //ResetFields();
+            ResetFields();
+        }
+
+        private void ResetFields()
+        {
+            TbxName.Clear();
+            TbxAge.Clear();
+
         }
 
         private void BtnDeletePerson_Click(object sender, RoutedEventArgs e)
         {
+            peopleList.RemoveAt(LvPeople.SelectedIndex);
+            LvPeople.SelectedItem = null;
+            LvPeople.Items.Refresh();
+            ResetFields();
         }
         private void BtnUpdatePerson_Click(object sender, RoutedEventArgs e)
         {
+            string name = TbxName.Text;
+            string error = null;
+            if (Person.IsNameValid(name, out error))
+            {
+                 // okay: no need to validate again
+                if(int.TryParse(TbxAge.Text, out int age) && Person.IsAgeValid(age, out error)) {
+                    peopleList.ElementAt(LvPeople.SelectedIndex).Name = name;
+                    peopleList.ElementAt(LvPeople.SelectedIndex).Age = age;
+                    LvPeople.Items.Refresh(); // tell ListView data has changed
+                }
+                else
+                {
+                    MessageBox.Show(this, "Age must be 0-150", "Invalid Age", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            } 
+            else
+            {
+                MessageBox.Show(this, "Name must be 2-50 characters long, no semicolons", "Invalid Name", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            ResetFields();
         }
 
         private void LvPeople_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (LvPeople.SelectedItem != null)
+            {
+                TbxName.Text = peopleList.ElementAt(LvPeople.SelectedIndex).Name;
+                TbxAge.Text = $"{peopleList.ElementAt(LvPeople.SelectedIndex).Age}";
+            }
         }
 
         private void LoadDataFromFile() // call when window is loaded
@@ -74,6 +110,15 @@ namespace Day03ListGridViewPeople
         private void MiExport_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void SortByAge_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void SortByName_Click(object sender, RoutedEventArgs e)
+        {
+            //peopleList.Sort();
         }
     }
 }
