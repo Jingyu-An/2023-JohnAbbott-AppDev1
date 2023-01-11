@@ -4,88 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using static Day01PeopleListInFile.Program;
 
 namespace Day01PeopleListInFile
 {
-
-    internal class Person
-    {
-        private string _name;
-        public string Name {
-            get { return _name; }
-            set {
-                if(!Regex.IsMatch(value, @"^[^;]{2,100}$")) 
-                {
-                    throw new AggregateException("Name must be 2-100 characters long, no semicolens");
-                }
-                _name = value; 
-            }
-        }
-
-        private int _age;
-        public int Age
-        {
-            get { return _age; }
-            set { 
-                if (value < 0 || value > 150)
-                {
-                    throw new AggregateException("Age must be 0-150");
-                }
-                _age = value; 
-            }
-        }
-
-        private string _city;
-        public string City
-        {
-            get { return _city; }
-            set { 
-                if(!Regex.IsMatch(value, @"^[^;]{2,100}$")) 
-                {
-                    throw new AggregateException("City must be 2-100 characters long, no semicolens");
-                }
-                _city = value; 
-            }
-        }
-/*
-        public string getName()
-        {
-            return Name;
-        }
-
-        public void setName(string name)
-        {
-            Name = name;
-        }
-
-        public int getAge()
-        {
-            return Age;
-        }
-        public void setAge(int age)
-        {
-            Age = age;
-        }
-
-        public void setCity(string city)
-        {
-            City = city;
-        }
-        public string getCity()
-        {
-            return City;
-        }
-*/
-        public override string ToString()
-        {
-            return $"{Name} is {Age} from {City}";
-        }
-    }
-
     internal class Program
     {
         static List<Person> people = new List<Person>();
@@ -99,23 +23,9 @@ namespace Day01PeopleListInFile
 
             while (running)
             {
-                Console.Write("What do you want to do?\n" +              
-                    "1. Add person info\n" +
-                    "2. List persons info\n" +
-                    "3. Find and list a person by name\n" +
-                    "4. Find and list persons younger than age\n" +
-                    "0. Exit\n" +
-                    "Choice: ");
+                int choice = getMenuChoice();
 
-                string choice = Console.ReadLine();
-
-                if (!int.TryParse(choice, out int num) || num > 4 || num < 0)
-                {
-                    Console.WriteLine("Invalid choice try again.\n");
-                    continue;
-                }
-
-                switch (num)
+                switch (choice)
                 {
                     case 0:
                         Console.WriteLine("\nGood bye!\n");
@@ -145,6 +55,17 @@ namespace Day01PeopleListInFile
             Console.ReadLine();
         }
 
+        private static int getMenuChoice()
+        {
+            Console.Write("What do you want to do?\n" +
+                   "1.Add person info\n" +
+                   "2.List persons info\n" +
+                   "3.Find and list a person by name\n" +
+                   "4.Find and list persons younger than age\n" +
+                   "0.Exit\n" + "Choice: ");
+            return (int.TryParse(Console.ReadLine(), out int choice)) ? choice : -1;
+        }
+
         static void ReadAllPeopleFromFile()
         {
             string line;
@@ -160,32 +81,36 @@ namespace Day01PeopleListInFile
 
                     while (line != null)
                     {
-                        Person person = new Person();
-
-                        string[] info = line.Split(';');
-
-
-                        if (!int.TryParse(info[1], out int age) || info.Length != 3)
+                        try
                         {
-                            Console.WriteLine("Invalid value.");
+                            Person person = new Person();
+
+                            string[] info = line.Split(';');
+
+                            if (info.Length != 3)
+                            {
+                                throw new FormatException("Invalid number of items");
+                            }
+
+                            person.Name = info[0];
+                            person.Age = int.Parse(info[1]);
+                            person.City = info[2];
+
+                            people.Add(person);
+
                             line = reader.ReadLine();
-                            continue;
                         }
-
-                        person.Name = info[0];
-                        person.Age = age;
-                        person.City = info[2];
-
-                        people.Add(person);
-
-                        line = reader.ReadLine();
+                        catch (Exception e) when (e is FormatException || e is ArgumentException)
+                        {
+                            Console.WriteLine("Error: " + e.Message);
+                        }
                     }
                 }
                 //reader.Close();
             }
-            catch (Exception e)
+            catch (Exception e) when (e is IOException || e is SystemException)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                Console.WriteLine("Error reading file: " + e.Message);
             }
         }
 
@@ -204,9 +129,9 @@ namespace Day01PeopleListInFile
 
                 //writer.Close();
             }
-            catch (Exception e)
+            catch (Exception e) when (e is IOException || e is SystemException)
             {
-                Console.WriteLine("Excetion: " + e.Message);
+                Console.WriteLine("Error writing file: " + e.Message);
             }
         }
 
@@ -215,35 +140,53 @@ namespace Day01PeopleListInFile
             Person person = new Person();
             Console.WriteLine("\nAdding a person.");
 
-            Console.Write("Enter name: ");
-            string name = Console.ReadLine();
-            person.Name = name;
+            while (true)
+            {
+                try
+                {
+                    Console.Write("Enter name: ");
+                    string name = Console.ReadLine();
+                    person.Name = name;
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                }
+            }
 
             while (true)
             {
                 try
                 {
                     Console.Write("Enter age: ");
-                    string strAge = Console.ReadLine();
-                    if (!int.TryParse(strAge, out int age))
-                    {
-                        Console.WriteLine("Invalid age try again.");
-                        continue;
-                    }
+                    int age = int.Parse(Console.ReadLine());
                     person.Age = age;
                     break;
-                } catch (Exception e)
+                } 
+                catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Error: " + e.Message);
                 }
             }
 
-            Console.Write("Enter city: ");
-            string city = Console.ReadLine();
-            person.City = city;
+            while (true)
+            {
+                try
+                {
+                    Console.Write("Enter city: ");
+                    string city = Console.ReadLine();
+                    person.City = city;
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error: " + e.Message);
+
+                }
+            }
 
             people.Add(person);
-
             Console.WriteLine("Person added.\n");
         }
 
