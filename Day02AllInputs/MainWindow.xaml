@@ -5,27 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Day02AllInputs"
         mc:Ignorable="d"
-        Title="All Inputs" Height="261" Width="414">
+        Title="All Inputs" Height="292" Width="432">
     <Grid>
         <Label Content="Name:" HorizontalAlignment="Left" Height="28" Margin="20,31,0,0" VerticalAlignment="Top" Width="141"/>
         <Label Content="Age:" HorizontalAlignment="Left" Height="28" Margin="20,64,0,0" VerticalAlignment="Top" Width="141"/>
         <Label Content="Pets:" HorizontalAlignment="Left" Height="28" Margin="20,97,0,0" VerticalAlignment="Top" Width="141"/>
         <Label Content="Continent of Residence" HorizontalAlignment="Left" Height="28" Margin="20,130,0,0" VerticalAlignment="Top" Width="141"/>
-        <Label Content="Preteened temp" HorizontalAlignment="Left" Height="28" Margin="20,163,0,0" VerticalAlignment="Top" Width="141"/>
-        <Button Name="BtnRegister" Content="Register Me" HorizontalAlignment="Center" Height="20" Margin="0,215,0,0" VerticalAlignment="Top" Width="102" Click="Button_Click"/>
-        <TextBox Name="TbxName" HorizontalAlignment="Left" Margin="67,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="191" Height="28"/>
+        <Label Content="Pref. temp(C)" HorizontalAlignment="Left" Height="28" Margin="20,163,0,0" VerticalAlignment="Top" Width="141"/>
+        <TextBox Name="TbxName" HorizontalAlignment="Left" Margin="67,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="191" Height="28" VerticalContentAlignment="Center"/>
+        <Grid HorizontalAlignment="Left" Height="28" Margin="57,64,0,0" VerticalAlignment="Top" Width="224">
+            <RadioButton x:Name="RbnBelow18" GroupName="RbnAge" Content="Below 18" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" />
+            <RadioButton x:Name="RbnAge18to35" GroupName="RbnAge" Content="18 - 35" HorizontalAlignment="Left" Margin="82,0,0,0" VerticalAlignment="Center" />
+            <RadioButton x:Name="RbnAge36Plus" GroupName="RbnAge" Content="36 And Up" HorizontalAlignment="Left" Margin="143,0,0,0" VerticalAlignment="Center" />
+        </Grid>
         <Grid HorizontalAlignment="Left" Height="28" Margin="67,97,0,0" VerticalAlignment="Top" Width="224">
-            <CheckBox Name="CBoxCat" Content="Cat" HorizontalAlignment="Left" Height="16" VerticalAlignment="Center" Width="43" Checked="CBoxCat_Checked"/>
-            <CheckBox Name="CBoxDog" Content="Dog" HorizontalAlignment="Left" Height="16" Margin="48,0,0,0" VerticalAlignment="Center" Width="42" Checked="CBoxDog_Checked"/>
-            <CheckBox Name="CBoxOther" Content="Other" HorizontalAlignment="Left" Height="16" Margin="95,0,0,0" VerticalAlignment="Center" Width="54" RenderTransformOrigin="0.722,0.469" Checked="CBoxOther_Checked"/>
+            <CheckBox Name="CbxCat" Content="Cat" HorizontalAlignment="Left" Height="16" VerticalAlignment="Center" Width="43" />
+            <CheckBox Name="CbxDog" Content="Dog" HorizontalAlignment="Left" Height="16" Margin="48,0,0,0" VerticalAlignment="Center" Width="42" />
+            <CheckBox Name="CbxOther" Content="Other" HorizontalAlignment="Left" Height="16" Margin="95,0,0,0" VerticalAlignment="Center" Width="54" RenderTransformOrigin="0.722,0.469" />
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="28" Margin="57,63,0,0" VerticalAlignment="Top" Width="224">
-            <RadioButton GroupName="RBtnAge" Content="Below 18" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Checked="RadioButton_Checked"/>
-            <RadioButton GroupName="RBtnAge" Content="18 - 35" HorizontalAlignment="Left" Margin="82,0,0,0" VerticalAlignment="Center"/>
-            <RadioButton GroupName="RBtnAge" Content="36 And Up" HorizontalAlignment="Left" Margin="143,0,0,0" VerticalAlignment="Center"/>
-        </Grid>
-        <ComboBox HorizontalAlignment="Left" Height="20" Margin="162,134,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="ComboBox_SelectionChanged"/>
-        <Slider HorizontalAlignment="Left" Height="25" Margin="141,166,0,0" VerticalAlignment="Top" Width="167" Maximum="35" Minimum="5" SmallChange="1" ValueChanged="Slider_ValueChanged"/>
-
+        <ComboBox x:Name="ComboResidence" HorizontalAlignment="Left" Height="20" Margin="162,134,0,0" VerticalAlignment="Top" Width="168">
+            <ComboBoxItem IsSelected="True">America</ComboBoxItem>
+            <ComboBoxItem>Europe</ComboBoxItem>
+            <ComboBoxItem>Antarctica</ComboBoxItem>
+            <ComboBoxItem>Asia</ComboBoxItem>
+            <ComboBoxItem>Australia</ComboBoxItem>
+            <ComboBoxItem>Africa</ComboBoxItem>
+        </ComboBox>
+        <Slider x:Name="SliderTempC" HorizontalAlignment="Left" Height="25" Margin="165,166,0,0" VerticalAlignment="Top" Width="168" Maximum="35" Minimum="15" UseLayoutRounding="False" TickPlacement="BottomRight" Value="20" LargeChange="0.5" TickFrequency="0.5"/>
+        <Button Name="BtnRegister" Content="Register Me" HorizontalAlignment="Center" Height="20" Margin="0,215,0,0" VerticalAlignment="Top" Width="102" Click="Button_Click"/>
     </Grid>
 </Window>

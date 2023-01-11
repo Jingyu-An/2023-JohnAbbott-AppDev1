@@ -12,9 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Xml.Linq;
 
-namespace Day02AllInputs
+namespace Day02MultiTempConv
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,17 +23,6 @@ namespace Day02AllInputs
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            string name = TbxName.Text;
-            if (name == "")
-            {
-                MessageBox.Show("Name must not be empty", "Input error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            MessageBox.Show($"Hello {name}, nice to meet you!", "Greeting", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
