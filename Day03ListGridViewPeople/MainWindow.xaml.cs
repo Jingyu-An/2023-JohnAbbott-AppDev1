@@ -25,7 +25,6 @@ namespace Day03ListGridViewPeople
         public MainWindow()
         {
             InitializeComponent();
-            LoadDataFromFile("people.txt");
             LvPeople.ItemsSource = peopleList;
         }
 
@@ -63,7 +62,6 @@ namespace Day03ListGridViewPeople
         private void BtnDeletePerson_Click(object sender, RoutedEventArgs e)
         {
             peopleList.RemoveAt(LvPeople.SelectedIndex);
-            LvPeople.SelectedItem = null;
             LvPeople.Items.Refresh();
             LblStatus.Text = "Person deleted!";
             ResetFields();
@@ -95,7 +93,8 @@ namespace Day03ListGridViewPeople
 
         private void LvPeople_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (LvPeople.SelectedItem != null)
+            Person currSelPer = LvPeople.SelectedItem as Person;
+            if (currSelPer != null)
             {
                 TbxName.Text = peopleList.ElementAt(LvPeople.SelectedIndex).Name;
                 TbxAge.Text = $"{peopleList.ElementAt(LvPeople.SelectedIndex).Age}";
@@ -210,8 +209,17 @@ namespace Day03ListGridViewPeople
 
         private void MiExit_Click(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
             SaveDataToFile("people.txt");
             Environment.Exit(0);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            LoadDataFromFile("people.txt");
         }
     }
 }
