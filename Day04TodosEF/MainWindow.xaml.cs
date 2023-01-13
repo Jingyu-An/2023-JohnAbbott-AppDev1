@@ -44,7 +44,7 @@ namespace Day04TodosEF
             id++;
             string task = TbxTask.Text;
             int difficulty = (int)SliderDifficulty.Value;
-            DateTime dueDate = DatepickerDueDate.DisplayDate;
+            DateTime dueDate = DatepickerDueDate.SelectedDate.Value;
             string status = ComboStatus.Text;
 
             Globals.dbContext.TodoList.Add(new Todo(id, task, difficulty, dueDate, status));
@@ -57,6 +57,39 @@ namespace Day04TodosEF
             Todo todo = LvTodoList.SelectedItem as Todo;
 
             Globals.dbContext.TodoList.Remove(todo);
+            Globals.dbContext.SaveChanges();
+            LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
+
+        }
+
+        private void LvTodoList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Todo todo = LvTodoList.SelectedItem as Todo;
+            if (todo != null)
+            {
+                TbxTask.Text = todo.Task;
+                SliderDifficulty.Value = todo.Difficulty;
+                DatepickerDueDate.SelectedDate = todo.DueDate;
+                ComboStatus.SelectedIndex = (int)todo.Status;
+            }
+        }
+
+        private void BtnUpdateTodo_Click(object sender, RoutedEventArgs e)
+        {
+            Todo todo = LvTodoList.SelectedItem as Todo;
+
+            string task = TbxTask.Text;
+            int difficulty = (int)SliderDifficulty.Value;
+            DateTime dueDate = DatepickerDueDate.SelectedDate.Value;
+            int status = ComboStatus.SelectedIndex;
+
+            Todo updateTodo = Globals.dbContext.TodoList.Find(keyValues: todo.Id);
+
+            updateTodo.Task = task;
+            updateTodo.Difficulty = difficulty;
+            updateTodo.DueDate = dueDate;
+            updateTodo.Status = (StatusEnum)status;
+
             Globals.dbContext.SaveChanges();
             LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
 

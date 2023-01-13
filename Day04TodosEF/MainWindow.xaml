@@ -11,7 +11,7 @@
             <Button x:Name="BtnExportAllTodoList" Content="Export All Todo List" HorizontalAlignment="Left" Margin="128,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="110" />
             <Button x:Name="BtnAddTodo" Content="Add" Margin="387,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" HorizontalAlignment="Left" Click="BtnAddTodo_Click" />
             <Button x:Name="BtnDeleteTodo" Content="Delete" HorizontalAlignment="Left" Margin="460,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" Click="BtnDeleteTodo_Click" />
-            <Button x:Name="BtnUpdateTodo" Content="Update" HorizontalAlignment="Left" Margin="528,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" />
+            <Button x:Name="BtnUpdateTodo" Content="Update" HorizontalAlignment="Left" Margin="528,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" Click="BtnUpdateTodo_Click" />
         </Grid>
         <Grid Width="228" DockPanel.Dock="Right">
             <Label Content="Task :" HorizontalAlignment="Left" Margin="10,19,0,0" VerticalAlignment="Top"/>
@@ -21,15 +21,15 @@
             <TextBox x:Name="TbxTask" HorizontalAlignment="Left" Margin="53,22,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="156" Height="20" VerticalContentAlignment="Center"/>
             <Slider x:Name="SliderDifficulty" HorizontalAlignment="Left" Margin="95,51,0,0" VerticalAlignment="Top" Width="114" AutoToolTipPlacement="TopLeft" Maximum="5" Minimum="1" TickPlacement="BottomRight" Value="2"/>
             <DatePicker x:Name="DatepickerDueDate" HorizontalAlignment="Left" Margin="81,82,0,0" VerticalAlignment="Top" Width="128" DisplayDateStart="1900-01-01" DisplayDateEnd="2099-01-01"/>
-            <ComboBox x:Name="ComboStatus" HorizontalAlignment="Left" Margin="81,114,0,0" VerticalAlignment="Top" Width="128">
-                <ComboBoxItem x:Name="ComboItemPending" Content="Pending" IsSelected="True"/>
+            <ComboBox x:Name="ComboStatus" HorizontalAlignment="Left" Margin="81,114,0,0" VerticalAlignment="Top" Width="128" SelectedIndex="0">
+                <ComboBoxItem x:Name="ComboItemPending" Content="Pending"/>
                 <ComboBoxItem x:Name="ComboItemDone" Content="Done"/>
                 <ComboBoxItem x:Name="ComboItemDelegated" Content="Delegated"/>
             </ComboBox>
             <Label Content="{Binding ElementName=SliderDifficulty, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="69,50,0,0" VerticalAlignment="Top" Width="18"/>
         </Grid>
         <Border BorderBrush="Gray" BorderThickness="0.5" Margin="10,10,10,10">
-            <ListView x:Name="LvTodoList" SelectionMode="Single">
+            <ListView x:Name="LvTodoList" SelectionMode="Single" SelectionChanged="LvTodoList_SelectionChanged" >
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Task" Width="170" DisplayMemberBinding="{Binding Task}"/>
