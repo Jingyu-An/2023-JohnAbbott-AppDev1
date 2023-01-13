@@ -10,7 +10,7 @@
         <Grid Height="50" DockPanel.Dock="Bottom">
             <Button x:Name="BtnExportAllTodoList" Content="Export All Todo List" HorizontalAlignment="Left" Margin="128,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="110" />
             <Button x:Name="BtnAddTodo" Content="Add" Margin="387,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" HorizontalAlignment="Left" Click="BtnAddTodo_Click" />
-            <Button x:Name="BtnDeleteTodo" Content="Delete" HorizontalAlignment="Left" Margin="460,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" />
+            <Button x:Name="BtnDeleteTodo" Content="Delete" HorizontalAlignment="Left" Margin="460,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" Click="BtnDeleteTodo_Click" />
             <Button x:Name="BtnUpdateTodo" Content="Update" HorizontalAlignment="Left" Margin="528,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" />
         </Grid>
         <Grid Width="228" DockPanel.Dock="Right">

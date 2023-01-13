@@ -54,6 +54,11 @@ namespace Day04TodosEF
 
         private void BtnDeleteTodo_Click(object sender, RoutedEventArgs e)
         {
+            Todo todo = LvTodoList.SelectedItem as Todo;
+
+            Globals.dbContext.TodoList.Remove(todo);
+            Globals.dbContext.SaveChanges();
+            LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
 
         }
     }
