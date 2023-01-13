@@ -15,14 +15,13 @@ namespace Day04TodosEF
 
         public Todo() { }
 
-        public Todo(int id, string task, int difficulty, DateTime dueDate, string status)
+        public Todo(string task, int difficulty, DateTime dueDate, StatusEnum status)
         {
-            Id = id;
-            _task = task;
-            _difficulty = difficulty;
-            _dueDate = dueDate;
-            Status = (StatusEnum)Enum.Parse(typeof(StatusEnum), status);
-            //Status = status;
+            Task = task;
+            Difficulty = difficulty;
+            DueDate = dueDate;
+            //Status = (StatusEnum)Enum.Parse(typeof(StatusEnum), status);
+            Status = status;
         }
 
         public int Id { get; set; }

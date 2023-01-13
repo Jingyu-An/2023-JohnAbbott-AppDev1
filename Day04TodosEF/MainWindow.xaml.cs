@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static Day04TodosEF.Todo;
 
 namespace Day04TodosEF
 {
@@ -21,7 +20,6 @@ namespace Day04TodosEF
     /// </summary>
     public partial class MainWindow : Window
     {
-        static int id = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,13 +39,12 @@ namespace Day04TodosEF
 
         private void BtnAddTodo_Click(object sender, RoutedEventArgs e)
         {
-            id++;
             string task = TbxTask.Text;
             int difficulty = (int)SliderDifficulty.Value;
             DateTime dueDate = DatepickerDueDate.SelectedDate.Value;
-            string status = ComboStatus.Text;
+            Todo.StatusEnum status = (Todo.StatusEnum)ComboStatus.SelectedIndex;
 
-            Globals.dbContext.TodoList.Add(new Todo(id, task, difficulty, dueDate, status));
+            Globals.dbContext.TodoList.Add(new Todo(task, difficulty, dueDate, status));
             Globals.dbContext.SaveChanges();
             LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
         }
@@ -88,7 +85,7 @@ namespace Day04TodosEF
             updateTodo.Task = task;
             updateTodo.Difficulty = difficulty;
             updateTodo.DueDate = dueDate;
-            updateTodo.Status = (StatusEnum)status;
+            updateTodo.Status = (Todo.StatusEnum)status;
 
             Globals.dbContext.SaveChanges();
             LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
