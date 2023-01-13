@@ -5,29 +5,93 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Day04TodosEF
 {
     public class Todo
     {
-        int Id { get; set; }
+
+        public Todo() { }
+
+        public Todo(int id, string task, int difficulty, DateTime dueDate, string status)
+        {
+            Id = id;
+            _task = task;
+            _difficulty = difficulty;
+            _dueDate = dueDate;
+            Status = (StatusEnum)Enum.Parse(typeof(StatusEnum), status);
+            //Status = status;
+        }
+
+        public int Id { get; set; }
+
+        private string _task;
 
         [Required]
         [StringLength(100)]
-        [RegularExpression("^[a-zA-Z0-9./,;+)(*!-]{1,100}")]
-        string Task { get; set; } // 1-100 characters, only letters, digits, space ./,;-+)(*! allowed
+        public string Task
+        {
+            get
+            {
+                return _task;
+            }
+            set
+            {
+                //Regex.IsMatch(Task, @"^[a-zA-Z0-9./,;\-+)(*!'""\s]{1,100}$");
+                if (value.Length < 1 || value.Length > 100)
+                {
+                    throw new ArgumentException("Maximum task size exceeded: must be up to 100 characters long");
+                }
+                _task = value;
+            }
+        } // 1-100 characters, only letters, digits, space ./,;-+)(*! allowed
+
+        private int _difficulty;
 
         [Required]
-        [Range(1,5)]
-        int Difficulty { get; set; } // 1-5 only front-end validation
+        public int Difficulty
+        {
+            get
+            {
+                return _difficulty;
+            }
+            set
+            {
+                if (value < 0 || value > 5)
+                {
+                    throw new ArgumentException("Maximum difficulty is up to 5");
+                }
+                _difficulty = value;
+            }
+        } // 1-5 only front-end validation
+
+        DateTime _dueDate;
+
 
         [Required]
         [DataType(DataType.DateTime)]
-        DateTime DueDate { get; set; } // 1900-2099 year required, format in GUI is whatever the OS is configured to use
+        public DateTime DueDate
+        {
+            get
+            {
+                return _dueDate;
+            }
+            set 
+            { 
+                if (value.Year < 1900 || value.Year > 2099)
+                {
+                    throw new ArgumentException("Invalid year. Must be between 1900-2099");
+                }
+                _dueDate = value;
+            }
+        }// 1900-2099 year required, format in GUI is whatever the OS is configured to use
+
+        public enum StatusEnum { Pending, Done, Delegated }
 
         [Required]
-        Statuses Status { get; set; }
-        enum Statuses { Pending, Done, Delegated }
+        [EnumDataType(typeof(StatusEnum))]
+        public StatusEnum Status { get; set; }
     }
 }
