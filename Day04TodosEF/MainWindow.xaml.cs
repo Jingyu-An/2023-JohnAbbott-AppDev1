@@ -39,14 +39,28 @@ namespace Day04TodosEF
 
         private void BtnAddTodo_Click(object sender, RoutedEventArgs e)
         {
-            string task = TbxTask.Text;
-            int difficulty = (int)SliderDifficulty.Value;
-            DateTime dueDate = DatepickerDueDate.SelectedDate.Value;
-            Todo.StatusEnum status = (Todo.StatusEnum)ComboStatus.SelectedIndex;
+            try
+            {
+                string task = TbxTask.Text;
+                int difficulty = (int)SliderDifficulty.Value;
+                DateTime dueDate = DatepickerDueDate.SelectedDate != null
+                    ? DatepickerDueDate.SelectedDate.Value
+                    : DatepickerDueDate.DisplayDate;
+                Todo.StatusEnum status = (Todo.StatusEnum)ComboStatus.SelectedIndex;
 
-            Globals.dbContext.TodoList.Add(new Todo(task, difficulty, dueDate, status));
-            Globals.dbContext.SaveChanges();
-            LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
+                Globals.dbContext.TodoList.Add(new Todo(task, difficulty, dueDate, status));
+                Globals.dbContext.SaveChanges();
+                LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
+            } 
+            catch (AggregateException ex)
+            {
+                MessageBox.Show(this, ex.Message, "Input error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (SystemException ex)
+            {
+                MessageBox.Show(this, "Error reading from database\n" + ex.Message, "Fatal error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BtnDeleteTodo_Click(object sender, RoutedEventArgs e)
@@ -90,6 +104,14 @@ namespace Day04TodosEF
             Globals.dbContext.SaveChanges();
             LvTodoList.ItemsSource = Globals.dbContext.TodoList.ToList();
 
+        }
+
+        private void LvTodoList_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ContextMenu m = new ContextMenu();
+            MenuItem delete = new MenuItem();
+            delete.Header= "Delete";
+            
         }
     }
 }

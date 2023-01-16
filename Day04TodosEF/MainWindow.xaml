@@ -13,7 +13,7 @@
             <Button x:Name="BtnDeleteTodo" Content="Delete" HorizontalAlignment="Left" Margin="460,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" Click="BtnDeleteTodo_Click" />
             <Button x:Name="BtnUpdateTodo" Content="Update" HorizontalAlignment="Left" Margin="528,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.23,-0.298" Height="25" Width="45" Click="BtnUpdateTodo_Click" />
         </Grid>
-        <Grid Width="228" DockPanel.Dock="Right">
+        <Grid Width="228" DockPanel.Dock="Right" Height="213">
             <Label Content="Task :" HorizontalAlignment="Left" Margin="10,19,0,0" VerticalAlignment="Top"/>
             <Label Content="Difficulty:" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top"/>
             <Label Content="Due Date :" HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top"/>
@@ -29,7 +29,7 @@
             <Label Content="{Binding ElementName=SliderDifficulty, Path=Value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="69,50,0,0" VerticalAlignment="Top" Width="18"/>
         </Grid>
         <Border BorderBrush="Gray" BorderThickness="0.5" Margin="10,10,10,10">
-            <ListView x:Name="LvTodoList" SelectionMode="Single" SelectionChanged="LvTodoList_SelectionChanged" >
+            <ListView x:Name="LvTodoList" SelectionMode="Single" SelectionChanged="LvTodoList_SelectionChanged" MouseRightButtonDown="LvTodoList_MouseRightButtonDown">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Task" Width="170" DisplayMemberBinding="{Binding Task}"/>
